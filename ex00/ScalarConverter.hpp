@@ -10,6 +10,7 @@ class ScalarConverter {
 		~ScalarConverter();
 
 	public:
-		ScalarConverter(std::string const & literal);
+		ScalarConverter(std::string const & input);
 		ScalarConverter & operator=(ScalarConverter & rhs);
+		void ScalarConverter::CheckInput();
 };
