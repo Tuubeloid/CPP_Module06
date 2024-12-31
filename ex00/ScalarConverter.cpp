@@ -3,6 +3,8 @@
 #include <cctype>
 #include <iostream>
 #include <stdexcept>
+#include <climits>
+#include <cfloat>
 
 /*
   Use appropriate functions to parse and handle the input, such as std::stoi for integers, 
@@ -54,21 +56,98 @@ bool isValidDoubleLiteral(const std::string& input) {
     return dotCount <= 1;
 }
 
-void ScalarConverter::CheckInput() {
-    if (isSpecialLiteral(_input)) {
-        // handle special literal
+void printSpecialLiteral(const std::string& input) {
+    if (input == "nan" || input == "nanf") {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: nanf" << std::endl;
+        std::cout << "double: nan" << std::endl;
     }
-    else if (isValidCharLiteral(_input)) {
-        // handle char literal
+    else if (input == "-inf" || input == "+inf" || input == "-inff" || input == "+inff") {
+        std::cout << "char: impossible" << std::endl;
+        std::cout << "int: impossible" << std::endl;
+        std::cout << "float: " << input << std::endl;
+        std::cout << "double: " << input.substr(0, input.length() - 1) << std::endl;
     }
-    else if (isValidIntLiteral(_input)) {
-        // handle int literal
+}
+
+void printCharLiteral(const std::string& input) {
+    char c = input[1];
+    std::cout << "char: '" << c << "'" << std::endl;
+    std::cout << "int: " << static_cast<int>(c) << std::endl;
+    std::cout << "float: " << static_cast<float>(c) << ".0f" << std::endl;
+    std::cout << "double: " << static_cast<double>(c) << ".0" << std::endl;
+}
+
+void printIntLiteral(const std::string& input) {
+    int i = std::stoi(input);
+    std::cout << "char: ";
+    if (std::isprint(i)) {
+        std::cout << "'" << static_cast<char>(i) << "'" << std::endl;
+    } else {
+        std::cout << "Non displayable" << std::endl;
     }
-    else if (isValidFloatLiteral(_input)) {
-        // handle float literal
+    std::cout << "int: " << i << std::endl;
+    std::cout << "float: " << static_cast<float>(i) << ".0f" << std::endl;
+    std::cout << "double: " << static_cast<double>(i) << ".0" << std::endl;
+}
+
+void printFloatLiteral(const std::string& input) {
+    float f = std::stof(input);
+    std::cout << "char: ";
+    if (std::isprint(f)) {
+        std::cout << "'" << static_cast<char>(f) << "'" << std::endl;
+    } else {
+        std::cout << "Non displayable" << std::endl;
     }
-    else if (isValidDoubleLiteral(_input)) {
-        // handle double literal
+    std::cout << "int: ";
+    if (f >= INT_MIN && f <= INT_MAX) {
+        std::cout << static_cast<int>(f) << std::endl;
+    } else {
+        std::cout << "impossible" << std::endl;
+    }
+    std::cout << "float: " << f << "f" << std::endl;
+    std::cout << "double: " << static_cast<double>(f) << std::endl;
+}
+
+void printDoubleLiteral(const std::string& input) {
+    double d = std::stod(input);
+    std::cout << "char: ";
+    if (std::isprint(d)) {
+        std::cout << "'" << static_cast<char>(d) << "'" << std::endl;
+    } else {
+        std::cout << "Non displayable" << std::endl;
+    }
+    std::cout << "int: ";
+    if (d >= INT_MIN && d <= INT_MAX) {
+        std::cout << static_cast<int>(d) << std::endl;
+    } else {
+        std::cout << "impossible" << std::endl;
+    }
+    std::cout << "float: ";
+    if (d >= -FLT_MAX && d <= FLT_MAX) {
+        std::cout << static_cast<float>(d) << "f" << std::endl;
+    } else {
+        std::cout << "impossible" << std::endl;
+    }
+    std::cout << "double: " << d << std::endl;
+}
+
+static void convert(const std::string& input) {
+    if (isSpecialLiteral(input)) {
+        printSpecialLiteral(input);
+    }
+    else if (isValidCharLiteral(input)) {
+        printCharLiteral(input);
+    }
+    else if (isValidIntLiteral(input)) {
+        printIntLiteral(input);
+    }
+    else if (isValidFloatLiteral(input)) {
+        printFloatLiteral(input);
+    }
+    else if (isValidDoubleLiteral(input)) {
+        printDoubleLiteral(input);
     }
     else {
         throw std::invalid_argument("Invalid input literal.");
