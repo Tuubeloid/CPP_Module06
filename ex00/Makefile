@@ -2,9 +2,9 @@ C = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++11
 DEBUG_FLAGS = -g -O0
 
-NAME = ScalarConverter
+NAME = convert
 
-SRCS = main.cpp ScalarConverter.cpp
+SRCS = ScalarConverter.cpp main.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

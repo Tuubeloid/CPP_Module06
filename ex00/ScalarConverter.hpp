@@ -1,15 +1,20 @@
 #pragma once
 #include <iostream>
 #include <string>
+#include <cctype>
+#include <stdexcept>
+#include <climits>
+#include <cfloat>
+#include <cmath>
 
 class ScalarConverter {
+    // Prevent instantiation by canonical form in private section
+    private:
+        ScalarConverter() {}
+        ~ScalarConverter() {}
+        ScalarConverter(const ScalarConverter&);
+        ScalarConverter& operator=(const ScalarConverter&);
 
-	private:
-		ScalarConverter();
-		~ScalarConverter();
-
-	public:
-		ScalarConverter(std::string const & input);
-		ScalarConverter & operator=(ScalarConverter & rhs);
-		static void convert(const std::string& input);
+    public:
+        static void convert(const std::string& input);
 };
