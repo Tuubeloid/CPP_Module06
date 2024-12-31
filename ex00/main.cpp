@@ -5,6 +5,7 @@ int main(int argc, char **argv) {
 		std::cerr << "Usage: ./convert <value>" << std::endl;
 		return 1;
 	}
+	std::cout << "input in main: " << argv[1] << std::endl;
 	ScalarConverter::convert(argv[1]);
 	return 0;
 }
