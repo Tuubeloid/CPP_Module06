@@ -13,7 +13,31 @@
   std::isnan(value) checks if a value is nan.
 */
 
+bool isNonDisplayable(const std::string& input) {
+    std::cout << "Inside displayable check" << std::endl;
+    if (input == "+nan" || input == "-nan" ||
+        input == "+nanf" || input == "-nanf") {
+            return false;
+    }
+    if (input.length() == 1) {
+        return std::isprint(input[0]);
+    }
+    bool containsOnlyAlpha = true;
+    for (size_t i = 0; i < input.length(); ++i) {
+        if (!std::isalpha(input[i])) {
+            containsOnlyAlpha = false;
+            break;
+        }
+    }
+    std::cout << containsOnlyAlpha << std::endl << input.length() << std::endl;
+    if (containsOnlyAlpha && input.length() > 1) {
+        return false;
+    }
+    return true;
+}
+
 bool isSpecialLiteral(const std::string& input) {
+    std::cout << "inside special literal check" << std::endl;
     return input == "nan" || input == "nanf" ||
            input == "-inf" || input == "+inf" ||
            input == "inf" || input == "inff" ||
@@ -47,6 +71,7 @@ bool isValidCharLiteral(const std::string& input) {
 }
 
 bool isValidIntLiteral(const std::string& input) {
+    std::cout << "Inside int validator"<< std::endl;
     size_t i = 0;
     if (input[i] == '+' || input[i] == '-') ++i;
     while (i < input.length() && std::isdigit(input[i])) ++i;
@@ -54,6 +79,7 @@ bool isValidIntLiteral(const std::string& input) {
 }
 
 bool isValidFloatLiteral(const std::string& input) {
+    std::cout << "Inside float validator"<< std::endl;
     size_t i = 0, dotCount = 0;
     if (input[i] == '+' || input[i] == '-') ++i;
     while (i < input.length() && (std::isdigit(input[i]) || input[i] == '.')) {
@@ -64,6 +90,7 @@ bool isValidFloatLiteral(const std::string& input) {
 }
 
 bool isValidDoubleLiteral(const std::string& input) {
+    std::cout << "Inside double validator"<< std::endl;
     size_t i = 0, dotCount = 0;
     if (input[i] == '+' || input[i] == '-') ++i;
     while (i < input.length() && (std::isdigit(input[i]) || input[i] == '.')) {
@@ -191,31 +218,39 @@ void ScalarConverter::convert(const std::string& input) {
     if (isSpecialLiteral(input)) {
         printSpecialLiteral(input);
         return ;
-    } else if (isValidCharLiteral(input)) {
+    }
+     else if (!isNonDisplayable(input)) {
+        std::cout << "Error: Invalid input 0" << std::endl;
         return ;
+    }
+     else if (isValidCharLiteral(input)) {
+        return ;
+    }
+     else if (isValidIntLiteral(input)) {
+         printIntLiteral(input);
+         return ;
     }
     size_t i = 0, dotCount = 0, strlen = input.length(), fCount = 0;
     if (input[i] == '+' || input[i] == '-') ++i;
-    while (i++ < strlen && (std::isdigit(input[i]) || input[i] == '.')) {
+    while (i < strlen && (std::isdigit(input[i]) || input[i] == '.')) {
         if (input[i] == '.') ++dotCount;
         else if (input[i] == 'f') ++fCount;
+        i++;
     }
-    std::cout << "i is at: " << i << std::endl;
-    if ((input[i] == 'f' && i != input.length() - 1) || i != input.length() || dotCount > 1 || fCount > 1) {
-        std::cout << "Error: Invalid input" << std::endl;
+    if (std::isalpha(input.back()) && input.back() != 'f') {
+        std::cout << "Error: Invalid input 1" << std::endl;
+        return ;
+    }
+    if (isValidDoubleLiteral(input)) {
+        printDoubleLiteral(input);
         return ;
     }
     if ((input.back() == 'f') && isValidFloatLiteral(input)) {
         printFloatLiteral(input);
         return ;
-    } else if (isValidIntLiteral(input)) {
-        printIntLiteral(input);
-        return ;
-    } else if (isValidDoubleLiteral(input)) {
-        printDoubleLiteral(input);
-        return ;
-    } else {
-        std::cout << "Error: Invalid input" << std::endl;
+    }
+    else {
+        std::cout << "Error: Invalid input 2" << std::endl;
         return ;
     }
 }
