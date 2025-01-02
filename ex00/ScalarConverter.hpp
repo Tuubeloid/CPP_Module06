@@ -5,6 +5,7 @@
 #include <cctype>
 #include <stdexcept>
 #include <climits>
+#include <limits>
 #include <cfloat>
 #include <cmath>
 
